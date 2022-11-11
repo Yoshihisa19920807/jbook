@@ -34,6 +34,11 @@ const App = () => {
       bundle: true,
       write: false,
       plugins: [unpkgPathPlugin()],
+      define: {
+        // double quote!! to indicate it's a string
+        'process.env.NODE_ENV': '"production"',
+        global: 'window',
+      },
     });
     console.log(ref.current);
     console.log(result);
