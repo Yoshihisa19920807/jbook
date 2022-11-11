@@ -12,7 +12,8 @@ const App = () => {
   const startService = async () => {
     ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: '/esbuild.wasm',
+      // node_moduleのファイル構造から推測
+      wasmURL: 'https://www.unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
     });
     // console.log(service);
   };
@@ -23,6 +24,7 @@ const App = () => {
 
   const onClick = async () => {
     console.log(input);
+    console.log(ref.current);
     if (!ref.current) {
       return;
     }
