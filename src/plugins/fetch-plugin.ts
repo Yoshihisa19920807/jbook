@@ -10,17 +10,9 @@ export const fetchPlugin = (inputCode: string) => {
   return {
     name: 'fetch-plugin',
     setup(build: esbuild.PluginBuild) {
-      // 読み込んだファイルの中にimportなど別のファイルの読み込みがある場合また呼ばれる
-      build.onLoad({ filter: /(^index\.js$)/ }, async (args: any) => {
-        // ファイルを読み込む前に偽ファイルを返している
-        return {
-          loader: 'jsx',
-          contents: inputCode,
-        };
-      });
-
-      build.onLoad({ filter: /.css$/ }, async (args: any) => {
-        console.log('onLoad/.css$/', args);
+      // If there's a cached file, return it
+      build.onLoad({ filter: /.*/ }, async (args: any) => {
+        console.log('onLoad/.*/', args);
         // Check to see if we have already fetched this file
         // and if it is in the chache
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
@@ -30,6 +22,18 @@ export const fetchPlugin = (inputCode: string) => {
         if (cachedResult) {
           return cachedResult;
         }
+      });
+
+      // 読み込んだファイルの中にimportなど別のファイルの読み込みがある場合また呼ばれる
+      build.onLoad({ filter: /(^index\.js$)/ }, async () => {
+        // ファイルを読み込む前に偽ファイルを返している
+        return {
+          loader: 'jsx',
+          contents: inputCode,
+        };
+      });
+
+      build.onLoad({ filter: /.css$/ }, async (args: any) => {
         const { data, request } = await axios.get(args.path);
         // g option indicates you replace all the corresponding characters
         const escaped = data
@@ -53,15 +57,6 @@ export const fetchPlugin = (inputCode: string) => {
 
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log('onLoad/.*/', args);
-        // Check to see if we have already fetched this file
-        // and if it is in the chache
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-        // if it is, return it immediately
-        if (cachedResult) {
-          return cachedResult;
-        }
         const { data, request } = await axios.get(args.path);
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
