@@ -46,6 +46,12 @@ const App = () => {
     console.log(ref.current);
     console.log(result);
     setCode(result.outputFiles[0].text);
+    try {
+      // execute javascript
+      eval(result.outputFiles[0].text);
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <div>
