@@ -8,6 +8,8 @@ const fileCache = localForage.createInstance({
 
 (async () => {
   await fileCache.setItem('color', 'red');
+  const color = await fileCache.getItem('color');
+  console.log(color);
 })();
 
 export const unpkgPathPlugin = () => {
@@ -62,7 +64,7 @@ export const unpkgPathPlugin = () => {
             //   console.log(react, reactDOM);
             // `,
             contents: `
-              import React, {useState} from 'react@16.0.0';
+              import React, {useState} from 'react';
               console.log(React, useState);
             `,
           };
@@ -80,7 +82,6 @@ export const unpkgPathPlugin = () => {
         }
 
         const { data, request } = await axios.get(args.path);
-        // Store response in cache
         // console.log(data, request);
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
@@ -88,6 +89,7 @@ export const unpkgPathPlugin = () => {
           resolveDir: new URL('./', request.responseURL).pathname,
         };
 
+        // Store response in cache
         await fileCache.setItem(args.path, request);
         return result;
       });
