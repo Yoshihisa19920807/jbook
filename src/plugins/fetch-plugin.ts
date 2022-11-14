@@ -12,7 +12,7 @@ export const fetchPlugin = (inputCode: string) => {
     setup(build: esbuild.PluginBuild) {
       // If there's a cached file, return it
       build.onLoad({ filter: /.*/ }, async (args: any) => {
-        console.log('onLoad/.*/', args);
+        // console.log('onLoad/.*/', args);
         // Check to see if we have already fetched this file
         // and if it is in the chache
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
