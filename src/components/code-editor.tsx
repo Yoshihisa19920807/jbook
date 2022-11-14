@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import './code-editor.css';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -29,18 +30,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onFormatClick = () => {
     // function_a().function_b()の形で使える
     const unformatted = editorRef.current.getModel().getValue();
-    const formatted = prettier.format(unformatted, {
-      parser: 'babel',
-      plugins: [parser],
-      singleQuote: true,
-    });
+    const formatted = prettier
+      .format(unformatted, {
+        parser: 'babel',
+        plugins: [parser],
+        singleQuote: true,
+      })
+      // $ indicates the end
+      .replace(/\n$/, '');
     console.log(editorRef.current);
     // onChange(formatted);
     editorRef.current.getModel().setValue(formatted);
   };
 
   return (
-    <div>
+    <div className="editor-wrapper">
       <button
         className="button button-format is-primary is-small"
         onClick={onFormatClick}
