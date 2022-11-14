@@ -33,6 +33,8 @@ const App = () => {
     //   loader: 'jsx',
     //   target: 'es2015',
     // });
+
+    iframe.current.srcdoc = html;
     const result = await ref.current.build({
       entryPoints: ['index.js'],
       bundle: true,
@@ -48,6 +50,7 @@ const App = () => {
     // console.log(result);
     // setCode(result.outputFiles[0].text);
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
+    console.log(1);
     // try {
     //   // execute javascript
     //   eval(result.outputFiles[0].text);
@@ -67,7 +70,13 @@ const App = () => {
     <div id="root"></div>
       <script>
         window.addEventListener('message', (event) => {
-          eval(event.data);
+          try {
+            eval(event.data)
+          } catch(err) {
+            const root = document.getElementById("root")
+            console.error(err)
+            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
+          };
         }, false);
       </script>
     </body>
