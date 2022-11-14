@@ -9,6 +9,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   // ": () => string" indicates that the type is a function whose return value is string?
   const editorDidMount = (getValue: () => string, monacoEditor: any) => {
     console.log(getValue());
+    monacoEditor.getModel().updateOptions({
+      tabSize: 2,
+    });
     monacoEditor.onDidChangeModelContent((e: any) => {
       console.log(e);
       console.log('getValue()=code=editor');
