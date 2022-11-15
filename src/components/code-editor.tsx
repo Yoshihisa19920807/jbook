@@ -60,8 +60,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
       })
       // $ indicates the end
       .replace(/\n$/, '');
-    console.log(editorRef.current);
-    // onChange(formatted);
     editorRef.current.getModel().setValue(formatted);
   };
 
@@ -75,11 +73,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
       </button>
       <MonacoEditor
         editorDidMount={editorDidMount}
-        // value="Inital Value"
         value={initialValue}
         theme="dark"
         language="javascript"
-        height="500px"
+        height="100%"
         options={{
           wordWrap: 'on',
           minimap: {

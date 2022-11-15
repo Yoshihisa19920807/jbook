@@ -1,90 +1,13 @@
 import * as esbuild from 'esbuild-wasm';
-import { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom/client';
-import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
-import { fetchPlugin } from './plugins/fetch-plugin';
-import CodeEditor from './components/code-editor';
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
-import Preview from './components/preview';
+import ReactDOM from 'react-dom/client';
+import CodeCell from './components/code-cell';
 
 const App = () => {
-  const ref = useRef<any>();
-  const [input, setInput] = useState('');
-  const [code, setCode] = useState('');
-
-  const startService = async () => {
-    ref.current = await esbuild.startService({
-      worker: true,
-      // node_moduleのファイル構造から推測
-      wasmURL: 'https://www.unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
-    });
-    // console.log(service);
-  };
-
-  useEffect(() => {
-    startService();
-  }, []);
-
-  const onClick = async () => {
-    // console.log(input);
-    // console.log(ref.current);
-    if (!ref.current) {
-      return;
-    }
-    // const result = await ref.current.transform(input, {
-    //   loader: 'jsx',
-    //   target: 'es2015',
-    // });
-
-    const result = await ref.current.build({
-      entryPoints: ['index.js'],
-      bundle: true,
-      write: false,
-      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
-      define: {
-        // double quote!! to indicate it's a string
-        'process.env.NODE_ENV': '"production"',
-        global: 'window',
-      },
-    });
-    // console.log(ref.current);
-    // console.log(result);
-    setCode(result.outputFiles[0].text);
-    // try {
-    //   // execute javascript
-    //   eval(result.outputFiles[0].text);
-    // } catch (e) {
-    //   console.log(e);
-    // }
-  };
-
-  // const html = `
-  // <script>
-
-  // ${code}</script>`.replace(/<\/script>/, '<\\/script>');
-
   return (
     <div>
-      <CodeEditor
-        initialValue="const a = 'Inital Value';"
-        onChange={(value) => {
-          console.log('value_index');
-          console.log(value);
-          setInput(value);
-        }}
-      />
-      {/* <textarea
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-      ></textarea> */}
-      <div>
-        <button onClick={onClick}>Submit</button>
-      </div>
-      {/* <pre>{code}</pre> */}
-      <Preview code={code} />
-      {/* <iframe ref={iframe} sandbox="allow-scripts" srcDoc={Preview} /> */}
+      <CodeCell />
+      {/* <CodeCell /> */}
     </div>
   );
 };
