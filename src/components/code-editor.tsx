@@ -1,8 +1,12 @@
+import './code-editor.css';
+import './syntax.css';
+
 import { useRef } from 'react';
-import MonacoEditor from '@monaco-editor/react';
+import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
-import './code-editor.css';
+import CodeShift from 'jscodeshift';
+import Hiligher from 'monaco-jsx-highlighter';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -12,12 +16,30 @@ interface CodeEditorProps {
 const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   // ": () => string" indicates that the type is a function whose return value is string?
   const editorRef = useRef<any>();
-  const editorDidMount = (getValue: () => string, monacoEditor: any) => {
+  const editorDidMount: EditorDidMount = (getValue, monacoEditor) => {
     editorRef.current = monacoEditor;
     console.log(getValue());
-    monacoEditor.getModel().updateOptions({
+    // ？はnilガード
+    monacoEditor.getModel()?.updateOptions({
       tabSize: 2,
     });
+
+    const highlighter = new Hiligher(
+      // ignores the type check for the next line
+      // @ts-ignore
+      window.monaco,
+      // ↑ When implementing monaco editor, it automatically provide monaco property to the global window
+      CodeShift,
+      monacoEditor
+    );
+    console.log(highlighter);
+    highlighter.highLightOnDidChangeModelContent(
+      () => {},
+      () => {},
+      undefined, // Custom for how errors would be spitted out
+      () => {}
+    );
+
     monacoEditor.onDidChangeModelContent((e: any) => {
       console.log(e);
       console.log('getValue()=code=editor');
