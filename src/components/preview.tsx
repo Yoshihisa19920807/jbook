@@ -1,4 +1,7 @@
+import './preview.css';
+
 import { useEffect, useRef } from 'react';
+import Resizable from './resizable';
 
 interface PreviewProps {
   code: string;
@@ -34,13 +37,16 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   }, [code]);
 
   return (
-    <iframe
-      style={{ backgroundColor: 'white' }}
-      title="preview"
-      ref={iframe}
-      sandbox="allow-scripts"
-      srcDoc={html}
-    />
+    // <Resizable direction="horizontal">
+    <div className="preview-wrapper">
+      <iframe
+        title="preview"
+        ref={iframe}
+        sandbox="allow-scripts"
+        srcDoc={html}
+      />
+    </div>
+    // </Resizable>
   );
 };
 
