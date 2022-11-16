@@ -35,8 +35,15 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
 
   useEffect(() => {
     const onResize = () => {
-      setWindowDimensions(getWindowDimensions());
-      setObjectDimensions(getObjectDimensions());
+      let timer: any;
+      // タイマーが動作中に再renderされた場合新しい新しいタイマーを作る前に既存のタイマー処理をclearする
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        setWindowDimensions(getWindowDimensions());
+        setObjectDimensions(getObjectDimensions());
+      }, 100);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
