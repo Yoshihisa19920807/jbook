@@ -4,6 +4,7 @@ import './text-editor.css';
 
 const TextEditor: React.FC = () => {
   const [editing, setEditing] = useState(true);
+  const [value, setValue] = useState('# Header');
 
   const toggleMode = () => {
     setEditing(!editing);
@@ -13,7 +14,12 @@ const TextEditor: React.FC = () => {
     return (
       <div>
         <button onClick={toggleMode}>Toggle Mode</button>
-        <MDEditor />
+        <MDEditor
+          value={value}
+          onChange={(e) => {
+            setValue(e || '');
+          }}
+        />
       </div>
     );
   } else {
@@ -21,7 +27,7 @@ const TextEditor: React.FC = () => {
       <div>
         <button onClick={toggleMode}>Toggle Mode</button>
         {/* <MDEditor /> */}
-        <MDEditor.Markdown source={'# header'} />
+        <MDEditor.Markdown source={value} />
       </div>
     );
   }
