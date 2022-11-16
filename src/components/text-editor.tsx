@@ -13,21 +13,31 @@ const TextEditor: React.FC = () => {
   if (editing) {
     return (
       <div>
-        <button onClick={toggleMode}>Toggle Mode</button>
-        <MDEditor
-          value={value}
-          onChange={(e) => {
-            setValue(e || '');
-          }}
-        />
+        <button className="mode-button" onClick={toggleMode}>
+          Toggle Mode
+        </button>
+        <div className="text-editor">
+          <MDEditor
+            value={value}
+            onChange={(e) => {
+              setValue(e || '');
+            }}
+          />
+        </div>
       </div>
     );
   } else {
     return (
       <div>
-        <button onClick={toggleMode}>Toggle Mode</button>
-        {/* <MDEditor /> */}
-        <MDEditor.Markdown source={value} />
+        <button className="mode-button" onClick={toggleMode}>
+          Toggle Mode
+        </button>
+        <div className="text-editor card">
+          <div className="card-content">
+            {/* <MDEditor /> */}
+            <MDEditor.Markdown source={value} />
+          </div>
+        </div>
       </div>
     );
   }
