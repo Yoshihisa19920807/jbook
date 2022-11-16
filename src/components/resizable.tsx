@@ -65,7 +65,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
           height:
             0 < objectDimensions.height &&
             objectDimensions.height < windowDimensions.height
-              ? objectDimensions.height * 0.5
+              ? objectDimensions.height
               : windowDimensions.height * 0.5,
           width: Infinity,
           resizeHandles: ['s'],
@@ -79,7 +79,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
           width:
             0 < objectDimensions.width &&
             objectDimensions.width < windowDimensions.width
-              ? objectDimensions.width * 0.75
+              ? objectDimensions.width
               : windowDimensions.width * 0.75,
           resizeHandles: ['e'],
         };
