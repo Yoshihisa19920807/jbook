@@ -4,3 +4,7 @@
   font-weight: unset !important;
   color: unset !important;
 }
+
+.w-md-editor ul {
+  line-height: 1;
+}
