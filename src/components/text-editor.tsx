@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import './text-editor.css';
 
 const TextEditor: React.FC = () => {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
 
   const toggleMode = () => {
     setEditing(!editing);
