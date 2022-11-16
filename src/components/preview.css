@@ -12,6 +12,13 @@
   display: block;
 }
 
+.preview-error {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: red;
+}
+
 .react-draggable-transparent-selection .preview-wrapper:after {
   content: '';
   /* it covers all the DOM with setting no margin from target element */
