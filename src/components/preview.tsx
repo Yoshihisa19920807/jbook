@@ -5,6 +5,7 @@ import Resizable from './resizable';
 
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
 const html = `
@@ -13,13 +14,21 @@ const html = `
     <body>
     <div id="root"></div>
       <script>
+        const handleError = (err) => {
+          const root = document.getElementById("root")
+          console.error(err)
+          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
+        }
+        window.addEventListener('error', (e) => {
+          event.preventDefault()
+          handleError(e.error)
+
+        })
         window.addEventListener('message', (event) => {
           try {
             eval(event.data)
           } catch(err) {
-            const root = document.getElementById("root")
-            console.error(err)
-            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
+            handleError(err)
           };
         }, false);
       </script>
@@ -27,7 +36,7 @@ const html = `
   </html>
   `;
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
+const Preview: React.FC<PreviewProps> = ({ code, err }) => {
   const iframe = useRef<any>();
   useEffect(() => {
     iframe.current.srcdoc = html;
@@ -45,6 +54,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
         sandbox="allow-scripts"
         srcDoc={html}
       />
+      {err && <div className="preview-error">{err}</div>}
     </div>
     // </Resizable>
   );
