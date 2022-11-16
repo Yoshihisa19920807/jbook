@@ -50,15 +50,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onFormatClick = () => {
     // function_a().function_b()の形で使える
     const unformatted = editorRef.current.getModel().getValue();
-    const formatted = prettier
-      .format(unformatted, {
-        parser: 'babel',
-        plugins: [parser],
-        singleQuote: true,
-      })
-      // $ indicates the end
-      .replace(/\n$/, '');
-    editorRef.current.getModel().setValue(formatted);
+    try {
+      const formatted = prettier
+        .format(unformatted, {
+          parser: 'babel',
+          plugins: [parser],
+          singleQuote: true,
+        })
+        // $ indicates the end
+        .replace(/\n$/, '');
+      editorRef.current.getModel().setValue(formatted);
+    } catch (err: any) {
+      console.error(err.name);
+      console.error(err.message);
+      editorRef.current.getModel().setValue(unformatted);
+    }
   };
 
   return (
