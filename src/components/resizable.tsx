@@ -1,6 +1,6 @@
 import './resizable.css';
 import { ResizableBox, ResizableBoxProps } from 'react-resizable';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface ResizableProps {
   direction: 'horizontal' | 'vertical';
@@ -16,9 +16,27 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     };
   };
 
+  const ref = useRef<any>();
+
+  const getObjectDimensions = () => {
+    if (ref.current) {
+      const { width: width, height: height } = ref.current?.state;
+      return {
+        width,
+        height,
+      };
+    } else {
+      return {
+        width: 0,
+        height: 0,
+      };
+    }
+  };
+
   useEffect(() => {
     const onResize = () => {
       setWindowDimensions(getWindowDimensions());
+      setObjectDimensions(getObjectDimensions());
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
@@ -27,13 +45,21 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     getWindowDimensions()
   );
 
+  const [objectDimensions, setObjectDimensions] = useState(
+    getObjectDimensions()
+  );
+
   const resizableProps: ResizableBoxProps =
     direction === 'vertical'
       ? {
           minConstraints: [Infinity, windowDimensions.height * 0.1],
           // maxConstraints={[Infinity, window.innerHeight * 0.9]}
           maxConstraints: [Infinity, windowDimensions.height * 0.9],
-          height: 300,
+          height:
+            0 < objectDimensions.height &&
+            objectDimensions.height < windowDimensions.height
+              ? objectDimensions.height * 0.5
+              : windowDimensions.height * 0.5,
           width: Infinity,
           resizeHandles: ['s'],
         }
@@ -43,15 +69,19 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
           // maxConstraints={[Infinity, window.innerHeight * 0.9]}
           maxConstraints: [windowDimensions.width * 0.75, Infinity],
           height: Infinity,
-          width: windowDimensions.width * 0.75,
+          width:
+            0 < objectDimensions.width &&
+            objectDimensions.width < windowDimensions.width
+              ? objectDimensions.width * 0.75
+              : windowDimensions.width * 0.75,
           resizeHandles: ['e'],
         };
 
-  // const size = useWindowSize();
-  console.log('windowDimensions');
-  console.log(windowDimensions);
-  console.log(windowDimensions.height * 0.9);
   // スプレッド記法でresizablePropsを受け取れる
-  return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
+  return (
+    <ResizableBox {...resizableProps} ref={ref}>
+      {children}
+    </ResizableBox>
+  );
 };
 export default Resizable;
