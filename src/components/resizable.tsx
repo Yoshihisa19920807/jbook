@@ -1,6 +1,6 @@
 import './resizable.css';
-import { ResizableBox } from 'react-resizable';
-import { useEffect, useState } from 'react';
+import { ResizableBox, ResizableBoxProps } from 'react-resizable';
+import { useEffect, useState, useRef } from 'react';
 
 interface ResizableProps {
   direction: 'horizontal' | 'vertical';
@@ -16,9 +16,34 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     };
   };
 
+  const ref = useRef<any>();
+
+  const getObjectDimensions = () => {
+    if (ref.current) {
+      const { width: width, height: height } = ref.current?.state;
+      return {
+        width,
+        height,
+      };
+    } else {
+      return {
+        width: 0,
+        height: 0,
+      };
+    }
+  };
+
   useEffect(() => {
     const onResize = () => {
-      setWindowDimensions(getWindowDimensions());
+      let timer: any;
+      // タイマーが動作中に再renderされた場合新しい新しいタイマーを作る前に既存のタイマー処理をclearする
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        setWindowDimensions(getWindowDimensions());
+        setObjectDimensions(getObjectDimensions());
+      }, 100);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
@@ -27,29 +52,41 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     getWindowDimensions()
   );
 
-  // const size = useWindowSize();
-  console.log('windowDimensions');
-  console.log(windowDimensions);
-  console.log(windowDimensions.height * 0.9);
-  return direction === 'vertical' ? (
-    <ResizableBox
-      minConstraints={[Infinity, windowDimensions.height * 0.1]}
-      // maxConstraints={[Infinity, window.innerHeight * 0.9]}
-      maxConstraints={[Infinity, windowDimensions.height * 0.9]}
-      height={300}
-      width={Infinity}
-      resizeHandles={['s']}
-      handleSize={[10, 10]}
-    >
-      {children}
-    </ResizableBox>
-  ) : (
-    <ResizableBox
-      height={Infinity}
-      width={300}
-      resizeHandles={['w']}
-      handleSize={[10, 10]}
-    >
+  const [objectDimensions, setObjectDimensions] = useState(
+    getObjectDimensions()
+  );
+
+  const resizableProps: ResizableBoxProps =
+    direction === 'vertical'
+      ? {
+          minConstraints: [Infinity, windowDimensions.height * 0.1],
+          // maxConstraints={[Infinity, window.innerHeight * 0.9]}
+          maxConstraints: [Infinity, windowDimensions.height * 0.9],
+          height:
+            0 < objectDimensions.height &&
+            objectDimensions.height < windowDimensions.height
+              ? objectDimensions.height
+              : windowDimensions.height * 0.5,
+          width: Infinity,
+          resizeHandles: ['s'],
+        }
+      : {
+          className: 'resize-horizontal',
+          minConstraints: [windowDimensions.width * 0.2, Infinity],
+          // maxConstraints={[Infinity, window.innerHeight * 0.9]}
+          maxConstraints: [windowDimensions.width * 0.75, Infinity],
+          height: Infinity,
+          width:
+            0 < objectDimensions.width &&
+            objectDimensions.width < windowDimensions.width
+              ? objectDimensions.width
+              : windowDimensions.width * 0.75,
+          resizeHandles: ['e'],
+        };
+
+  // スプレッド記法でresizablePropsを受け取れる
+  return (
+    <ResizableBox {...resizableProps} ref={ref}>
       {children}
     </ResizableBox>
   );

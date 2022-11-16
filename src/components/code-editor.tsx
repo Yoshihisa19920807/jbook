@@ -18,7 +18,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const editorRef = useRef<any>();
   const editorDidMount: EditorDidMount = (getValue, monacoEditor) => {
     editorRef.current = monacoEditor;
-    console.log(getValue());
     // ？はnilガード
     monacoEditor.getModel()?.updateOptions({
       tabSize: 2,
@@ -32,7 +31,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
       CodeShift,
       monacoEditor
     );
-    console.log(highlighter);
     highlighter.highLightOnDidChangeModelContent(
       () => {},
       () => {},
@@ -41,9 +39,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     );
 
     monacoEditor.onDidChangeModelContent((e: any) => {
-      console.log(e);
-      console.log('getValue()=code=editor');
-      console.log(getValue());
+      // console.log(e);
+      // console.log('getValue()=code=editor');
+      // console.log(getValue());
       onChange(getValue());
     });
     // return onChange;
@@ -52,15 +50,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onFormatClick = () => {
     // function_a().function_b()の形で使える
     const unformatted = editorRef.current.getModel().getValue();
-    const formatted = prettier
-      .format(unformatted, {
-        parser: 'babel',
-        plugins: [parser],
-        singleQuote: true,
-      })
-      // $ indicates the end
-      .replace(/\n$/, '');
-    editorRef.current.getModel().setValue(formatted);
+    try {
+      const formatted = prettier
+        .format(unformatted, {
+          parser: 'babel',
+          plugins: [parser],
+          singleQuote: true,
+        })
+        // $ indicates the end
+        .replace(/\n$/, '');
+      editorRef.current.getModel().setValue(formatted);
+    } catch (err: any) {
+      console.error(err.name);
+      console.error(err.message);
+      editorRef.current.getModel().setValue(unformatted);
+    }
   };
 
   return (
