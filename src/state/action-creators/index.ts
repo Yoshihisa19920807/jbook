@@ -1,6 +1,6 @@
 // Action is delivered through reducer, store to state by dispatch
 import { ActionTypes } from '../action-types';
-import { Direction } from '../actions/direction';
+import { Direction } from '../actions';
 import { CellTypes } from '../cell';
 import {
   Action,
