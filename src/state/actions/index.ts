@@ -1,6 +1,7 @@
 import { ActionTypes } from '../action-types';
 import { CellTypes } from '../cell';
-import { Direction } from './direction';
+
+export type Direction = 'up' | 'down';
 
 export interface MoveCellAction {
   type: ActionTypes.MOVE_CELL;
