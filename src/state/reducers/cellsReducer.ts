@@ -16,8 +16,9 @@ const initialState: CellsState = {
   error: null,
   order: [],
 };
-// 引数の初期値設定
+
 const reducer = (
+  // 引数の初期値設定
   state: CellsState = initialState,
   action: Action
 ): CellsState => {
