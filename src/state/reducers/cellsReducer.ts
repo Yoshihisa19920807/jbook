@@ -27,7 +27,7 @@ const reducer = produce(
   ) => {
     switch (action.type) {
       case ActionTypes.UPDATE_CELL: {
-        let { id, content } = action.payload;
+        const { id, content } = action.payload;
         // return {
         //   // // 「他を残す」ことを明示するためにスプレッド記法を使っている。
         //   // // stateをまんま返すがdataだけは上書きして返す --- (1)
@@ -61,7 +61,7 @@ const reducer = produce(
         return;
       }
       case ActionTypes.MOVE_CELL: {
-        let { id, direction } = action.payload;
+        const { id, direction } = action.payload;
         const index = state.order.findIndex((orderId) => orderId === id);
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
         // Invalid case
@@ -74,7 +74,22 @@ const reducer = produce(
         return;
       }
       case ActionTypes.INSERT_CELL_BEFORE: {
-        return state;
+        const { id, type } = action.payload;
+        const cell: Cell = {
+          id: randomId(),
+          type: type,
+          content: '',
+        };
+
+        state.data[cell.id] = cell;
+        const index = state.order.findIndex((orderId) => orderId === id);
+        if (index < 0) {
+          state.order.push(cell.id);
+        } else {
+          state.order.splice(index, 0, cell.id);
+        }
+
+        return;
       }
       case ActionTypes.DELETE_CELL: {
         delete state.data[action.payload.id];
@@ -88,5 +103,9 @@ const reducer = produce(
   },
   initialState
 );
+
+const randomId = () => {
+  return Math.random().toString(36);
+};
 
 export default reducer;
