@@ -26,8 +26,8 @@ const reducer = produce(
     action: Action
   ) => {
     switch (action.type) {
-      case ActionTypes.UPDATE_CELL:
-        const { id, content } = action.payload;
+      case ActionTypes.UPDATE_CELL: {
+        let { id, content } = action.payload;
         // return {
         //   // // 「他を残す」ことを明示するためにスプレッド記法を使っている。
         //   // // stateをまんま返すがdataだけは上書きして返す --- (1)
@@ -56,17 +56,34 @@ const reducer = produce(
         // };
         // ↓ write in immer
 
-        // no need
+        // No need return anything. Immer handles it.
         state.data[id].content = content;
-        break;
-      case ActionTypes.MOVE_CELL:
+        return;
+      }
+      case ActionTypes.MOVE_CELL: {
+        let { id, direction } = action.payload;
+        const index = state.order.findIndex((orderId) => orderId === id);
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        // Invalid case
+        if (targetIndex < 0 || targetIndex > state.order.length - 1) {
+          return;
+        }
+        // payloadで持っているidでの上書きを後回し
+        state.order[index] = state.order[targetIndex];
+        state.order[targetIndex] = id;
+        return;
+      }
+      case ActionTypes.INSERT_CELL_BEFORE: {
         return state;
-      case ActionTypes.INSERT_CELL_BEFORE:
+      }
+      case ActionTypes.DELETE_CELL: {
+        delete state.data[action.payload.id];
+        state.order = state.order.filter((id) => id !== action.payload.id);
+        return;
+      }
+      default: {
         return state;
-      case ActionTypes.DELETE_CELL:
-        return state;
-      default:
-        return state;
+      }
     }
   },
   initialState
