@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
 // Test
-import { ActionTypes } from './action-types';
+// import { ActionTypes } from './action-types';
 
 // createStore(<reducer>, <initial value>, <middleware or enhancer>)
 // middleware adds extra functionalities to dispatch function
@@ -18,54 +18,54 @@ export const store = createStore(
   composeEnhancers(applyMiddleware(thunk))
 );
 
-// Test
-store.dispatch({
-  type: ActionTypes.INSERT_CELL_BEFORE,
-  payload: {
-    id: Math.random().toString(),
-    type: 'code',
-  },
-});
-
-store.dispatch({
-  type: ActionTypes.INSERT_CELL_BEFORE,
-  payload: {
-    id: null,
-    type: 'text',
-  },
-});
-
-const order_id = store.getState().cells.order[1];
-
-store.dispatch({
-  type: ActionTypes.INSERT_CELL_BEFORE,
-  payload: {
-    id: order_id,
-    type: 'code',
-  },
-});
-
-store.dispatch({
-  type: ActionTypes.MOVE_CELL,
-  payload: {
-    id: order_id,
-    direction: 'up',
-  },
-});
-
-store.dispatch({
-  type: ActionTypes.UPDATE_CELL,
-  payload: {
-    id: order_id,
-    content: 'updated',
-  },
-});
-
+// // Test
 // store.dispatch({
-//   type: ActionTypes.DELETE_CELL,
+//   type: ActionTypes.INSERT_CELL_BEFORE,
 //   payload: {
-//     id: order_id,
+//     id: Math.random().toString(),
+//     type: 'code',
 //   },
 // });
 
-console.log(store.getState());
+// store.dispatch({
+//   type: ActionTypes.INSERT_CELL_BEFORE,
+//   payload: {
+//     id: null,
+//     type: 'text',
+//   },
+// });
+
+// const order_id = store.getState().cells.order[1];
+
+// store.dispatch({
+//   type: ActionTypes.INSERT_CELL_BEFORE,
+//   payload: {
+//     id: order_id,
+//     type: 'code',
+//   },
+// });
+
+// store.dispatch({
+//   type: ActionTypes.MOVE_CELL,
+//   payload: {
+//     id: order_id,
+//     direction: 'up',
+//   },
+// });
+
+// store.dispatch({
+//   type: ActionTypes.UPDATE_CELL,
+//   payload: {
+//     id: order_id,
+//     content: 'updated',
+//   },
+// });
+
+// // store.dispatch({
+// //   type: ActionTypes.DELETE_CELL,
+// //   payload: {
+// //     id: order_id,
+// //   },
+// // });
+
+// console.log(store.getState());
