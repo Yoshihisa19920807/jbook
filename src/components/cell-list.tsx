@@ -11,7 +11,9 @@ const CellList: React.FC = () => {
     return order.map((id) => data[id]);
   });
 
-  const renderedCells = cells.map((cell) => <CellListItem cell={cell} />);
+  const renderedCells = cells.map((cell) => (
+    <CellListItem key={cell.id} cell={cell} />
+  ));
   return (
     <div>
       {renderedCells}
