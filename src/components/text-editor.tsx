@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import './text-editor.css';
+import { Cell } from '../state';
+import { useActions } from '../hooks/use-actions';
 
-const TextEditor: React.FC = () => {
+interface TextEditorProps {
+  cell: Cell;
+}
+
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   const [editing, setEditing] = useState(true);
-  const [value, setValue] = useState('# Header');
+  // const [value, setValue] = useState('# Header');
+  const { updateCell } = useActions();
 
   const toggleMode = () => {
     setEditing(!editing);
@@ -18,9 +25,11 @@ const TextEditor: React.FC = () => {
         </button>
         <div className="text-editor">
           <MDEditor
-            value={value}
+            // value={value}
+            value={cell.content}
             onChange={(e) => {
-              setValue(e || '');
+              // setValue(e || '');
+              updateCell(cell.id, e || '');
             }}
           />
         </div>
@@ -35,7 +44,10 @@ const TextEditor: React.FC = () => {
         <div className="text-editor card">
           <div className="card-content">
             {/* <MDEditor /> */}
-            <MDEditor.Markdown source={value} />
+            <MDEditor.Markdown
+              // source={value}
+              source={cell.content}
+            />
           </div>
         </div>
       </div>
