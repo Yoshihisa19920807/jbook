@@ -91,6 +91,24 @@ const reducer = produce(
 
         return;
       }
+      case ActionTypes.INSERT_CELL_AFTER: {
+        const { id, type } = action.payload;
+        const cell: Cell = {
+          id: randomId(),
+          type: type,
+          content: '',
+        };
+
+        state.data[cell.id] = cell;
+        const index = state.order.findIndex((orderId) => orderId === id);
+        if (index < 0) {
+          state.order.unshift(cell.id);
+        } else {
+          state.order.splice(index + 1, 0, cell.id);
+        }
+
+        return;
+      }
       case ActionTypes.DELETE_CELL: {
         delete state.data[action.payload.id];
         state.order = state.order.filter((id) => id !== action.payload.id);
