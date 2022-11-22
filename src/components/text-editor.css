@@ -72,4 +72,16 @@
   position: absolute;
   top: 0;
   right: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.text-editor-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.text-editor-wrapper:hover .mode-button {
+  opacity: 1;
 }

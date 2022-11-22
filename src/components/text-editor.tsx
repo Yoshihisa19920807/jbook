@@ -10,7 +10,6 @@ interface TextEditorProps {
 
 const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   const [editing, setEditing] = useState(true);
-  // const [value, setValue] = useState('# Header');
   const { updateCell } = useActions();
 
   const toggleMode = () => {
@@ -19,16 +18,14 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
 
   if (editing) {
     return (
-      <div>
+      <div className="text-editor-wrapper">
         <button className="mode-button" onClick={toggleMode}>
           Toggle Mode
         </button>
         <div className="text-editor">
           <MDEditor
-            // value={value}
             value={cell.content}
             onChange={(e) => {
-              // setValue(e || '');
               updateCell(cell.id, e || '');
             }}
           />
@@ -37,17 +34,13 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
     );
   } else {
     return (
-      <div>
+      <div className="text-editor-wrapper">
         <button className="mode-button" onClick={toggleMode}>
           Toggle Mode
         </button>
         <div className="text-editor card">
           <div className="card-content">
-            {/* <MDEditor /> */}
-            <MDEditor.Markdown
-              // source={value}
-              source={cell.content}
-            />
+            <MDEditor.Markdown source={cell.content} />
           </div>
         </div>
       </div>
