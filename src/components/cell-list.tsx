@@ -1,4 +1,5 @@
 import { useTypedSelector } from '../hooks/use-typed-selector';
+import AddCell from './add-cell';
 import CellListItem from './cell-list-item';
 const CellList: React.FC = () => {
   // useSelector allows you to extract data from the Redux store state, using a selector function.
@@ -12,7 +13,10 @@ const CellList: React.FC = () => {
   });
 
   const renderedCells = cells.map((cell) => (
-    <CellListItem key={cell.id} cell={cell} />
+    <div>
+      <CellListItem key={cell.id} cell={cell} />
+      <AddCell nextCellId={cell.id} />
+    </div>
   ));
   return (
     <div>
