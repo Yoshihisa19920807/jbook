@@ -19,7 +19,10 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   if (editing) {
     return (
       <div className="text-editor-wrapper">
-        <button className="button mode-button is-primary" onClick={toggleMode}>
+        <button
+          className="button mode-button is-primary is-small"
+          onClick={toggleMode}
+        >
           Mode Switch
         </button>
         <div className="text-editor">
@@ -35,8 +38,11 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   } else {
     return (
       <div className="text-editor-wrapper">
-        <button className="mode-button" onClick={toggleMode}>
-          Toggle Mode
+        <button
+          className="button mode-button is-primary is-small"
+          onClick={toggleMode}
+        >
+          Mode Switch
         </button>
         <div className="text-editor card">
           <div className="card-content">
