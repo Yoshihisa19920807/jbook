@@ -1,4 +1,10 @@
 .action-bar {
   display: flex;
   justify-content: end;
+  opacity: 0.25;
+  transition: 0.5s;
+}
+
+.action-bar:hover {
+  opacity: 1;
 }
