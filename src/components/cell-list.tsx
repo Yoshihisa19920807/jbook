@@ -23,7 +23,6 @@ const CellList: React.FC = () => {
   return (
     <div>
       {renderedCells}
-      <br />
       <AddCell nextCellId={null} />
     </div>
   );

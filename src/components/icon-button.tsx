@@ -10,7 +10,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 }) => {
   return (
     <button
-      className={`button is-primary is-small ${className}`}
+      className={`button is-primary is-small ${className || ''}`}
       onClick={onClick}
     >
       <span className="icon">
