@@ -1,13 +1,24 @@
 import { Cell } from '../state/cell';
+import TextEditor from './text-editor';
+import CodeCell from './code-cell';
+import ActionBar from './action-bar';
+import './cell-list-item.css';
 
-const CellListItem = ({ cell }: { cell: Cell }) => {
+interface CellListItemProps {
+  cell: Cell;
+}
+
+const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
+  let child =
+    cell.type === 'code' ? (
+      <CodeCell cell={cell} />
+    ) : (
+      <TextEditor cell={cell} />
+    );
   return (
-    <div>
-      <span>ID: {cell.id}</span>
-      <br />
-      <span>Content: {cell.content}</span>
-      <br />
-      <br />
+    <div className="cell-list-item">
+      <ActionBar id={cell.id} />
+      {child}
     </div>
   );
 };

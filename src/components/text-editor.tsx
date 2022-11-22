@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import './text-editor.css';
+import { Cell } from '../state';
+import { useActions } from '../hooks/use-actions';
 
-const TextEditor: React.FC = () => {
+interface TextEditorProps {
+  cell: Cell;
+}
+
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   const [editing, setEditing] = useState(true);
-  const [value, setValue] = useState('# Header');
+  const { updateCell } = useActions();
 
   const toggleMode = () => {
     setEditing(!editing);
@@ -12,15 +18,18 @@ const TextEditor: React.FC = () => {
 
   if (editing) {
     return (
-      <div>
-        <button className="mode-button" onClick={toggleMode}>
-          Toggle Mode
+      <div className="text-editor-wrapper">
+        <button
+          className="button mode-button is-primary is-small"
+          onClick={toggleMode}
+        >
+          Mode Switch
         </button>
         <div className="text-editor">
           <MDEditor
-            value={value}
+            value={cell.content}
             onChange={(e) => {
-              setValue(e || '');
+              updateCell(cell.id, e || '');
             }}
           />
         </div>
@@ -28,14 +37,16 @@ const TextEditor: React.FC = () => {
     );
   } else {
     return (
-      <div>
-        <button className="mode-button" onClick={toggleMode}>
-          Toggle Mode
+      <div className="text-editor-wrapper">
+        <button
+          className="button mode-button is-primary is-small"
+          onClick={toggleMode}
+        >
+          Mode Switch
         </button>
         <div className="text-editor card">
           <div className="card-content">
-            {/* <MDEditor /> */}
-            <MDEditor.Markdown source={value} />
+            <MDEditor.Markdown source={cell.content} />
           </div>
         </div>
       </div>
