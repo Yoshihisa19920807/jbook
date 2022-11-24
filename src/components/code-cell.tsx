@@ -1,8 +1,6 @@
-import * as esbuild from 'esbuild-wasm';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import CodeEditor from './code-editor';
 import Preview from './preview';
-import { BundlesState } from '../state/reducers/bundleReducer';
 import Resizable from './resizable';
 import { Cell } from '../state';
 import { useActions } from '../hooks/use-actions';
@@ -14,8 +12,7 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
-  const bundle = useTypedSelector((state) => state.bundles![cell.id]);
-  console.log(bundle);
+  const bundle = useTypedSelector((state) => state.bundles[cell.id]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -26,11 +23,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       clearTimeout(timer);
     };
   }, [cell.content, cell.id]);
-
-  // const onClick = async () => {
-  //   const output = await bundle(input);
-  //   setCode(output);
-  // };
 
   return (
     <Resizable direction="vertical">
@@ -56,4 +48,3 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
 };
 
 export default CodeCell;
-// ReactDOM.render(<App />, document.querySelector('#root'));
