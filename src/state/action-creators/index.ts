@@ -10,8 +10,6 @@ import {
   MoveCellAction,
   InsertCellBeforeAction,
   InsertCellAfterAction,
-  BundleStartAction,
-  BundleCompleteAction,
 } from '../actions';
 
 import bundle from '../../bundler';
