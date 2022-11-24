@@ -1,4 +1,5 @@
 // Action is delivered through reducer, store to state by dispatch
+import { Dispatch } from 'react';
 import { ActionTypes } from '../action-types';
 import { Direction } from '../actions';
 import { CellTypes } from '../cell';
@@ -9,7 +10,11 @@ import {
   MoveCellAction,
   InsertCellBeforeAction,
   InsertCellAfterAction,
+  BundleStartAction,
+  BundleCompleteAction,
 } from '../actions';
+
+import bundle from '../../bundler';
 
 export const updateCell = (id: string, content: string): UpdateCellAction => {
   return {
@@ -63,5 +68,25 @@ export const insertCellAfter = (
       id,
       type,
     },
+  };
+};
+
+export const createBundle = (cellId: string, input: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionTypes.BUNDLE_START,
+      payload: {
+        cellId,
+      },
+    });
+    const result = await bundle(input);
+
+    dispatch({
+      type: ActionTypes.BUNDLE_COMPLETE,
+      payload: {
+        cellId,
+        bundle: result,
+      },
+    });
   };
 };
