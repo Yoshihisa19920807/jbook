@@ -20,7 +20,8 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
 
   const getObjectDimensions = () => {
     if (ref.current) {
-      const { width: width, height: height } = ref.current?.state;
+      // ↓ const { width: width, height: height } = ref.current?.state;
+      const { width, height } = ref.current?.state;
       return {
         width,
         height,
