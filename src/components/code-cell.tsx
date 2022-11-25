@@ -14,22 +14,38 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.cells;
+    const orderedCells = order.map((id) => data[id]);
+    const codeArray = [];
+    for (let c of orderedCells) {
+      if (c.type === 'code') {
+        codeArray.push(c.content);
+      }
+      if (c.id === cell.id) {
+        break;
+      }
+    }
+    return codeArray;
+  });
+
+  console.log(cumulativeCode);
 
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
     }, 1000);
 
     // Executed at the cleanup phase
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.content, cell.id, createBundle]);
+  }, [cumulativeCode.join('\n'), cell.id, createBundle]);
 
   return (
     <Resizable direction="vertical">
@@ -42,7 +58,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       >
         <Resizable direction="horizontal">
           <CodeEditor
-            initialValue="const a = 'Inital Value';"
+            initialValue={cell.content}
             onChange={(value) => {
               updateCell(cell.id, value);
             }}
