@@ -34,6 +34,6 @@ export const useCumulativeCode = (cellId: string) => {
         break;
       }
     }
-    return codeArray;
+    return codeArray.join('\n');
   });
 };
