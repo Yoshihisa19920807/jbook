@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
 // Test
-// import { ActionTypes } from './action-types';
+import { ActionTypes } from './action-types';
 
 // createStore(<reducer>, <initial value>, <middleware or enhancer>)
 // middleware adds extra functionalities to dispatch function
@@ -61,11 +61,11 @@ export const store = createStore(
 //   },
 // });
 
-// // store.dispatch({
-// //   type: ActionTypes.DELETE_CELL,
-// //   payload: {
-// //     id: order_id,
-// //   },
-// // });
+// store.dispatch({
+//   type: ActionTypes.DELETE_CELL,
+//   payload: {
+//     id: order_id,
+//   },
+// });
 
-// console.log(store.getState());
+console.log(store.getState());
